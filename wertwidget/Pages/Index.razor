@@ -1,0 +1,38 @@
+﻿@page "/"
+@using System.Runtime.InteropServices
+@using System.Text.Json
+@inject IJSRuntime JSRuntime
+<PageTitle>OpenWertWidget</PageTitle>
+
+<button class="btn btn-info" @onclick="OpenWertWidget">Open Wert.io Widget</button>
+<script type="module" src="/Scripts/mainwert-bandle.js"></script>
+@code {
+    private void OpenWertWidget()
+    {
+        var options = new
+        {
+            PartnerId = "01HJ3VMM454XKA737WAEQQEJV9",
+            ClickId = Guid.NewGuid().ToString(),
+            Origin = "https://sandbox.wert.io",
+            Currency = "USD",
+            Commodity = "ETH",
+            Network = "sepolia",
+            CurrencyAmount = 100,
+            Commodities = JsonSerializer.Serialize(new[]
+            {
+                new { Commodity = "BTC", Network = "testnet" },
+                new { Commodity = "ETH", Network = "sepolia" }
+            }),
+            Listeners = new
+            {
+
+            }
+        };
+
+        JSRuntime.InvokeAsync<string>("openwert", options);
+    }
+    async Task CallJsFunction()
+    {
+
+    }
+}
